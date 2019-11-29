@@ -9,3 +9,6 @@
 
 # PyCharm saved files
 .idea
+
+# python coverage temp file
+.coverage

@@ -3,7 +3,7 @@ import unittest
 from threading import Thread
 from time import sleep
 from unittest import TestCase
-from cy_rwlock import RwLock
+from rwlock import RwLock
 from time import time as now
 
 
@@ -84,10 +84,3 @@ class TestRwLock(TestCase):
                               args=('w1', rwlock, initial_time, 4, 1, 6)))
         [t.start() for t in threads]
         [t.join() for t in threads]
-
-
-if __name__ == '__main__':
-    LOG_FMT = "%(asctime)s [%(levelname)s] " \
-              "%(filename)s:%(lineno)s %(name)s %(funcName)s() : %(message)s"
-    logging.basicConfig(level=logging.DEBUG, format=LOG_FMT)
-    unittest.main()
