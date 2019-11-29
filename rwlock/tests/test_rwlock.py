@@ -1,5 +1,4 @@
 import logging
-import unittest
 from threading import Thread
 from time import sleep
 from unittest import TestCase
@@ -20,43 +19,39 @@ class TestRwLock(TestCase):
         diff = (initial_time + start_time) - now()
         sleep(0 if diff < 0 else diff)
 
-        self.log.debug("%s: read", name)
-        lock.acquire_r()
+        self.log.debug("%s: in", name)
+        with lock.lock_r():
+            self.log.debug("%s: start", name)
+            t = now() - initial_time
+            diff = abs(t - expected_start_time)
+            success = (diff / expected_start_time) < 0.1
+            self.assertTrue(success)
+            self.log.info("success: %s, t=%s, diff=%s", success, t, diff)
 
-        self.log.debug("%s: read start", name)
-        t = now() - initial_time
-        diff = abs(t - expected_start_time)
-        success = (diff / expected_start_time) < 0.1
-        self.assertTrue(success)
-        self.log.info("success: %s, t=%s, diff=%s", success, t, diff)
+            sleep(running_time)
 
-        sleep(running_time)
-
-        self.log.debug("%s: read end", name)
-        lock.release_r()
+            self.log.debug("%s: end", name)
 
     def writer(self, name, lock, initial_time, start_time, running_time,
                expected_start_time):
         diff = (initial_time + start_time) - now()
         sleep(0 if diff < 0 else diff)
 
-        self.log.debug("%s: write", name)
-        lock.acquire_w()
+        self.log.debug("%s: in", name)
+        with lock.lock_w():
+            self.log.debug("%s: start", name)
+            t = now() - initial_time
+            diff = abs(t - expected_start_time)
+            success = (diff / expected_start_time) < 0.1
+            self.assertTrue(success)
+            self.log.info("success: %s, t=%s, diff=%s", success, t, diff)
 
-        self.log.debug("%s: write start", name)
-        t = now() - initial_time
-        diff = abs(t - expected_start_time)
-        success = (diff / expected_start_time) < 0.1
-        self.assertTrue(success)
-        self.log.info("success: %s, t=%s, diff=%s", success, t, diff)
+            sleep(running_time)
 
-        sleep(running_time)
-
-        self.log.debug("%s: write end", name)
-        lock.release_w()
+            self.log.debug("%s: end", name)
 
     def test_rwlock(self):
-        rwlock = RwLock(write_first=False)
+        rwlock = RwLock(write_first=False, debug=True)
         threads = []
         initial_time = now()
         threads.append(Thread(target=self.reader,
@@ -71,7 +66,7 @@ class TestRwLock(TestCase):
         [t.join() for t in threads]
 
     def test_rwlock_write_first(self):
-        rwlock = RwLock(write_first=True)
+        rwlock = RwLock(write_first=True, debug=True)
         threads = []
         initial_time = now()
         threads.append(Thread(target=self.reader,
