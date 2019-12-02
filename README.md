@@ -66,8 +66,18 @@ RwLock:
     1. https://github.com/cy-arduino/cy_rwlock/blob/master/rwlock/tests/test_rwlock.py
 
 ### Unittest
-* run `scripts\run.bat`
+* local(windows)
+** run `scripts\run.bat`
+* github
+** auto run when push
 
 ### Deploy
-- run `scripts\deploy.bat`
+* PyPI version
+** convertd from git tag
+*** see setup.py: convert_version()
+*** https://github.com/cy-arduino/cy_rwlock/blob/master/setup.py
+* local(windows)
+** run `scripts\deploy.bat`
+* github -> PyPI
+** When release in github
 
