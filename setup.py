@@ -38,6 +38,7 @@ def convert_version(git_version):
 try:
     version = subprocess.check_output(
         'git describe --tags', shell=True).rstrip().decode('utf-8')
+    version = convert_version(version)
 except subprocess.CalledProcessError:
     version = DEFAULT_VERSION
 
