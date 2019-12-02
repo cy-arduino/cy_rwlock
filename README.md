@@ -25,15 +25,17 @@ RwLock:
 1. Exclude "multiple readers" and each writer.
 1. provide a flag "write_first" to prevent starve writer.
 
-## Install
+## Usage
+
+### Install
 1. `pip install cy_rwlock`
 1. download latest from https://pypi.org/project/cy_rwlock/#files
 
 
-## Unittest
+### Unittest
 * run `scripts\run.bat`
 
 
-## Deploy
+### Deploy
 - run `scripts\deploy.bat`
 
