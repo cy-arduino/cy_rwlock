@@ -1,3 +1,6 @@
+[![Coverage](https://codecov.io/gh/cy-arduino/cy_rwlock/branch/master/graph/badge.svg)](https://codecov.io/gh/cy-arduino/cy_rwlock)
+
+
 # RwLock: Reader-Writer lock
 
 ## Release Note
