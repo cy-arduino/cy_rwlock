@@ -1,4 +1,5 @@
 import re
+import os
 import subprocess
 
 from setuptools import setup, find_packages
@@ -42,6 +43,16 @@ try:
 except subprocess.CalledProcessError:
     version = DEFAULT_VERSION
 
+# noinspection PyBroadException
+try:
+    cur_path = os.path.abspath(os.path.dirname(__file__))
+    with open(os.path.join(cur_path, 'README.md'), encoding='utf-8') as f:
+        long_description = f.read()
+except Exception as e:
+    long_description = ""
+finally:
+    long_description_content_type = 'text/markdown'
+
 setup(name=PACKAGE_NAME,
       version=version,
       description=DESCRIPTION,
@@ -50,4 +61,6 @@ setup(name=PACKAGE_NAME,
       author_email=EMAIL,
       license=LICENSE,
       packages=find_packages(exclude=['tests', 'test_*']),
+      long_description=long_description,
+      long_description_content_type=long_description_content_type,
       zip_safe=False)
