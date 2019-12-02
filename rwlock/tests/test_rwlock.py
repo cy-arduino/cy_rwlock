@@ -7,6 +7,9 @@ from time import time as now
 
 
 class TestRwLock(TestCase):
+    TIME_ACCURACY = 0.1
+    TIME_TICK = 0.1
+
     def setUp(self):
         if not hasattr(self, 'log'):
             self.log = logging.getLogger(self.__class__.__name__)
@@ -14,40 +17,43 @@ class TestRwLock(TestCase):
     def tearDown(self):
         pass
 
+    def chk_time_match(self, initial_time, expected_start_time):
+        t = now() - initial_time
+        diff = abs(t - expected_start_time)
+
+        self.log.info("t=%s, diff=%s", t, diff)
+        self.assertTrue((diff / expected_start_time) < self.TIME_ACCURACY)
+
     def reader(self, name, lock, initial_time, start_time, running_time,
                expected_start_time):
+        start_time *= self.TIME_TICK
+        running_time *= self.TIME_TICK
+        expected_start_time *= self.TIME_TICK
+
         diff = (initial_time + start_time) - now()
         sleep(0 if diff < 0 else diff)
 
         self.log.debug("%s: in", name)
         with lock.lock_r():
             self.log.debug("%s: start", name)
-            t = now() - initial_time
-            diff = abs(t - expected_start_time)
-            success = (diff / expected_start_time) < 0.1
-            self.assertTrue(success)
-            self.log.info("success: %s, t=%s, diff=%s", success, t, diff)
-
+            self.chk_time_match(initial_time, expected_start_time)
             sleep(running_time)
-
             self.log.debug("%s: end", name)
 
     def writer(self, name, lock, initial_time, start_time, running_time,
                expected_start_time):
+        start_time *= self.TIME_TICK
+        running_time *= self.TIME_TICK
+        expected_start_time *= self.TIME_TICK
+
         diff = (initial_time + start_time) - now()
         sleep(0 if diff < 0 else diff)
 
         self.log.debug("%s: in", name)
         with lock.lock_w():
             self.log.debug("%s: start", name)
-            t = now() - initial_time
-            diff = abs(t - expected_start_time)
-            success = (diff / expected_start_time) < 0.1
-            self.assertTrue(success)
-            self.log.info("success: %s, t=%s, diff=%s", success, t, diff)
-
+            self.chk_time_match(initial_time, expected_start_time)
             sleep(running_time)
-
             self.log.debug("%s: end", name)
 
     def test_rwlock(self):
