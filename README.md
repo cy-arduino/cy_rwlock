@@ -14,8 +14,8 @@ This will starve writer.
 
 RwLock:
 1. Let readers running simultaneously.
-2. Exclude "multiple readers" and each writer.
-3. provide a flag "write_first" to prevent starve writer.
+1. Exclude "multiple readers" and each writer.
+1. provide a flag "write_first" to prevent starve writer.
 
 ## Install
 1. `pip install cy_rwlock`
@@ -31,4 +31,4 @@ RwLock:
 
 
 ## TODO
-TBD
+* autogen pypi project description
