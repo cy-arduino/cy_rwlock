@@ -4,15 +4,17 @@ import subprocess
 
 from setuptools import setup, find_packages
 
+##########################################################
 DEFAULT_VERSION = "0.0.0"
 AUTHOR = 'ChihYing_Lin'
 EMAIL = ''
 PACKAGE_NAME = 'cy_rwlock'
 URL = 'https://github.com/cy-arduino/' + PACKAGE_NAME
 LICENSE = 'LGPL'
-DESCRIPTION = ''
-DESCRIPTION_FILE = 'README.md'
-DESCRIPTION_TYPE = 'text/markdown'
+DESCRIPTION = 'RwLock: Reader-Writer lock'
+LONG_DESCRIPTION_FILE = 'README.md'
+LONG_DESCRIPTION_TYPE = 'text/markdown'
+##########################################################
 
 
 # convert version from git tag to pypi style
@@ -49,11 +51,11 @@ def get_pypi_version():
     return version
 
 
-def get_long_desc():
+def read_file(file_name):
     # noinspection PyBroadException
     try:
         cur_path = os.path.abspath(os.path.dirname(__file__))
-        with open(os.path.join(cur_path, DESCRIPTION_FILE), encoding='utf-8') as f:
+        with open(os.path.join(cur_path, file_name)) as f:
             long_description = f.read()
     except Exception:
         long_description = ""
@@ -68,6 +70,6 @@ setup(name=PACKAGE_NAME,
       author_email=EMAIL,
       license=LICENSE,
       packages=find_packages(exclude=['tests', 'test_*']),
-      long_description=get_long_desc(),
-      long_description_content_type=DESCRIPTION_TYPE,
+      long_description=read_file(LONG_DESCRIPTION_FILE),
+      long_description_content_type=LONG_DESCRIPTION_TYPE,
       zip_safe=False)
