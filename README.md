@@ -30,11 +30,11 @@ RwLock:
 1. download latest from https://pypi.org/project/cy_rwlock/#files
 
 
-## unittest
+## Unittest
 * run `scripts\run.bat`
 
 
-## deploy
+## Deploy
 - run `scripts\deploy.bat`
 
 
