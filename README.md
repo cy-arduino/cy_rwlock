@@ -37,6 +37,3 @@ RwLock:
 ## Deploy
 - run `scripts\deploy.bat`
 
-
-## TODO
-* autogen pypi project description
