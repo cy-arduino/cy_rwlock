@@ -1,5 +1,13 @@
 # RwLock: Reader-Writer lock
 
+## Release Note
+1. V1.2: 
+    1. fix version convert issue in setup.py
+1. V1.1: 
+    1. Reduce test time
+    1. Refactoring
+1. V1.0: first release
+
 ## Introduction
 We can simply protect a shared resource by a lock. But the performance is not
 good because each reader should run one-by-one.
@@ -19,11 +27,11 @@ RwLock:
 
 ## Install
 1. `pip install cy_rwlock`
-1. download from https://pypi.org/project/cy_rwlock/#files
+1. download latest from https://pypi.org/project/cy_rwlock/#files
 
 
 ## unittest
-- run `scripts\run.bat`
+* run `scripts\run.bat`
 
 
 ## deploy
