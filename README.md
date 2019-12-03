@@ -35,35 +35,29 @@ RwLock:
 1. download latest version from https://pypi.org/project/cy_rwlock/#files
 
 #### Example
-1. Reader
-    1. <pre>from rwlock import RwLock</pre>
-    1. <pre>rwlock = RwLock()</pre>
-    1. <pre>
-        rwlock.acquire_r()
-        //Do read
-        rwlock.release_r()
-        </pre>
-    1. OR
-    1. <pre>
-        with rwlock.lock_r():
-            //Do read
-        </pre>
-1. Writer
-    1. <pre>from rwlock import RwLock</pre>
-    1. <pre>rwlock = RwLock()</pre>
-    1. <pre>
-        rwlock.acquire_w()
-        //Do write
-        rwlock.release_w()
-        </pre>
-    1. OR
-    1. <pre>
-        with rwlock.lock_w():
-            //Do write
-        </pre>
-    
-1. full example:
-    1. https://github.com/cy-arduino/cy_rwlock/blob/master/rwlock/tests/test_rwlock.py
+<pre><code>
+from rwlock import RwLock
+
+rwlock = RwLock()
+
+### READER
+rwlock.acquire_r()
+# read...
+rwlock.release_r()
+
+# OR
+with rwlock.lock_r():
+    # read...
+
+### WRITER
+rwlock.acquire_w()
+# write...
+rwlock.release_w()
+
+# OR
+with rwlock.lock_w():
+    # write...
+</code></pre>
 
 ### Unittest
 * local(windows)
