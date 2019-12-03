@@ -14,6 +14,16 @@ LICENSE = 'LGPL'
 DESCRIPTION = 'RwLock: Reader-Writer lock'
 LONG_DESCRIPTION_FILE = 'README.md'
 LONG_DESCRIPTION_TYPE = 'text/markdown'
+KEYWORDS = 'rwlock'
+INSTALL_REQUIRES = []
+CLASSIFIERS = [
+        'Natural Language :: English',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Topic :: Software Development :: Libraries',
+    ]
 ##########################################################
 
 
@@ -72,4 +82,7 @@ setup(name=PACKAGE_NAME,
       packages=find_packages(exclude=['tests', 'test_*']),
       long_description=read_file(LONG_DESCRIPTION_FILE),
       long_description_content_type=LONG_DESCRIPTION_TYPE,
+      install_requires=INSTALL_REQUIRES,
+      classifiers=CLASSIFIERS,
+      keywords=KEYWORDS,
       zip_safe=False)
