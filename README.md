@@ -3,6 +3,8 @@
 
 # RwLock: Reader-Writer lock
 
+NOTE: RwLock only support multi-thread!!
+
 ## Introduction
 We can simply protect a shared resource by a lock. But the performance is not
 good because each reader should run one-by-one.
