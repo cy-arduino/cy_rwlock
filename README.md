@@ -3,8 +3,6 @@
 
 # RwLock: Reader-Writer lock
 
-NOTE: RwLock currently only support multi-thread!!
-
 ## Introduction
 We can simply protect a shared resource by a lock. But the performance is not
 good because each reader should run one-by-one.
@@ -21,6 +19,9 @@ RwLock:
 1. Let readers running simultaneously.
 1. Exclude "multiple readers" and each writer.
 1. provide a flag "write_first" to prevent starve writer.
+
+After 1.6.0, RwLock can support multi-thread(default) and multi-process.
+For multi-process scenario, use `rwlock = RwLock(cross_process=True)`
 
 ## Usage
 
