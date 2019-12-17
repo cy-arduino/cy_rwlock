@@ -1,4 +1,14 @@
+
+[![Python Version](https://img.shields.io/pypi/pyversions/cy_rwlock.svg)](https://pypi.org/project/cy-rwlock/)
+[![Pypi Version](https://img.shields.io/pypi/v/cy_rwlock.svg)](https://pypi.org/project/cy-rwlock/)
+[![Code size in bytes](https://img.shields.io/github/languages/code-size/cy-arduino/cy_rwlock.svg)](https://pypi.org/project/cy-rwlock/#files)
+
+
 [![Coverage](https://codecov.io/gh/cy-arduino/cy_rwlock/branch/master/graph/badge.svg)](https://codecov.io/gh/cy-arduino/cy_rwlock)
+
+
+[![License](https://img.shields.io/pypi/l/cy_rwlock.svg)](https://github.com/cy-arduino/cy_rwlock/blob/master/LICENSE)
+
 
 
 # RwLock: Reader-Writer lock
