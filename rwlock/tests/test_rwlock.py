@@ -1,5 +1,4 @@
 import logging
-from threading import Thread
 from time import sleep
 from unittest import TestCase
 from rwlock import RwLock
@@ -56,32 +55,61 @@ class TestRwLock(TestCase):
             sleep(running_time)
             self.log.debug("%s: end", name)
 
-    def test_rwlock(self):
-        rwlock = RwLock(write_first=False, debug=True)
-        threads = []
-        initial_time = now()
-        threads.append(Thread(target=self.reader,
-                              args=('r1', rwlock, initial_time, 1, 2, 1)))
-        threads.append(Thread(target=self.reader,
-                              args=('r2', rwlock, initial_time, 2, 4, 2)))
-        threads.append(Thread(target=self.reader,
-                              args=('r3', rwlock, initial_time, 5, 2, 5)))
-        threads.append(Thread(target=self.writer,
-                              args=('w1', rwlock, initial_time, 4, 1, 7)))
-        [t.start() for t in threads]
-        [t.join() for t in threads]
+    def _test_rwlock_write_first(self, cross_process):
+        if cross_process:
+            from multiprocessing import Process as Runner
+        else:
+            from threading import Thread as Runner
 
-    def test_rwlock_write_first(self):
-        rwlock = RwLock(write_first=True, debug=True)
-        threads = []
+        rwlock = RwLock(write_first=True, debug=True,
+                        cross_process=cross_process)
+
+        runner = []
         initial_time = now()
-        threads.append(Thread(target=self.reader,
-                              args=('r1', rwlock, initial_time, 1, 2, 1)))
-        threads.append(Thread(target=self.reader,
-                              args=('r2', rwlock, initial_time, 2, 4, 2)))
-        threads.append(Thread(target=self.reader,
-                              args=('r3', rwlock, initial_time, 5, 2, 7)))
-        threads.append(Thread(target=self.writer,
-                              args=('w1', rwlock, initial_time, 4, 1, 6)))
-        [t.start() for t in threads]
-        [t.join() for t in threads]
+        runner.append(Runner(target=self.reader,
+                             args=('r1', rwlock, initial_time, 1, 2, 1)))
+        runner.append(Runner(target=self.reader,
+                             args=('r2', rwlock, initial_time, 2, 4, 2)))
+        runner.append(Runner(target=self.reader,
+                             args=('r3', rwlock, initial_time, 5, 2, 7)))
+        runner.append(Runner(target=self.writer,
+                             args=('w1', rwlock, initial_time, 4, 1, 6)))
+        [w.start() for w in runner]
+        [w.join() for w in runner]
+
+
+    def _test_rwlock(self, cross_process):
+        if cross_process:
+            from multiprocessing import Process as Runner
+        else:
+            from threading import Thread as Runner
+
+        self.log.info("cross_process=%s", cross_process)
+
+        rwlock = RwLock(write_first=False, debug=True,
+                        cross_process=cross_process)
+        runner = []
+        initial_time = now()
+        runner.append(Runner(target=self.reader,
+                             args=('r1', rwlock, initial_time, 1, 2, 1)))
+        runner.append(Runner(target=self.reader,
+                             args=('r2', rwlock, initial_time, 2, 4, 2)))
+        runner.append(Runner(target=self.reader,
+                             args=('r3', rwlock, initial_time, 5, 2, 5)))
+        runner.append(Runner(target=self.writer,
+                             args=('w1', rwlock, initial_time, 4, 1, 7)))
+        [w.start() for w in runner]
+        [w.join() for w in runner]
+
+    def test_rwlock_process(self):
+        self._test_rwlock(cross_process=True)
+
+    def test_rwlock_thread(self):
+        self._test_rwlock(cross_process=False)
+
+    def test_rwlock_write_first_process(self):
+        self._test_rwlock_write_first(cross_process=True)
+
+    def test_rwlock_write_first_thread(self):
+        self._test_rwlock_write_first(cross_process=False)
+

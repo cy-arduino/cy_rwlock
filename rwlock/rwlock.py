@@ -1,13 +1,15 @@
-from threading import Lock
+from multiprocessing import Lock, Value
 from contextlib import contextmanager
 import logging
 
 
 class RwLock:
-    def __init__(self, name=None, write_first=True, debug=False):
+    def __init__(self, name=None, write_first=True, debug=False,
+                 cross_process=True):
         self.name = name if name else self.__class__.__name__
         self.log = logging.getLogger(self.name)
         self.log.propagate = debug
+        self._cross_process = cross_process
 
         # prevent writer starvation. block new read when someone want to write.
         self._write_first = write_first
@@ -15,8 +17,12 @@ class RwLock:
         self._write_lock = Lock()
         if self._write_first:
             self._read_lock = Lock()
-        self._read_cnt_lock = Lock()
-        self._read_cnt = 0
+
+        if self._cross_process:
+            self._read_cnt = Value('i', 0)
+        else:
+            self._read_cnt_lock = Lock()
+            self._read_cnt = 0
 
     def acquire_r(self):
         self.log.debug("")
@@ -25,19 +31,34 @@ class RwLock:
             self._read_lock.acquire()
             self.log.debug("wait writter done")
             self._read_lock.release()
-        with self._read_cnt_lock:
-            self._read_cnt += 1
-            self.log.debug("read count+ = %s", self._read_cnt)
-            if self._read_cnt == 1:
-                self._write_lock.acquire()
+
+        if self._cross_process:
+            with self._read_cnt.get_lock():
+                self._read_cnt.value += 1
+                self.log.debug("read count+ = %s", self._read_cnt.value)
+                if self._read_cnt.value == 1:
+                    self._write_lock.acquire()
+        else:
+            with self._read_cnt_lock:
+                self._read_cnt += 1
+                self.log.debug("read count+ = %s", self._read_cnt)
+                if self._read_cnt == 1:
+                    self._write_lock.acquire()
 
     def release_r(self):
         self.log.debug("")
-        with self._read_cnt_lock:
-            self._read_cnt -= 1
-            self.log.debug("read count- = %s", self._read_cnt)
-            if self._read_cnt == 0:
-                self._write_lock.release()
+        if self._cross_process:
+            with self._read_cnt.get_lock():
+                self._read_cnt.value -= 1
+                self.log.debug("read count- = %s", self._read_cnt.value)
+                if self._read_cnt.value == 0:
+                    self._write_lock.release()
+        else:
+            with self._read_cnt_lock:
+                self._read_cnt -= 1
+                self.log.debug("read count- = %s", self._read_cnt)
+                if self._read_cnt == 0:
+                    self._write_lock.release()
 
     def acquire_w(self):
         self.log.debug("")
