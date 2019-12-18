@@ -33,6 +33,15 @@ RwLock:
 After 1.6.0, RwLock can support multi-thread(default) and multi-process.
 For multi-process scenario, use `rwlock = RwLock(cross_process=True)`
 
+### Version control
+
+* cy-rwlock XX.YY.ZZ
+    1. XX.YY match the latest git tag.
+    1. ZZ will increase automatically when new commit appear in master branch.
+    1. XX: Update when change architecture
+    1. YY: Update when add or modify some features
+    1. ZZ: Update when bugfix or minor changes.
+    
 ## Usage
 
 ### Install
@@ -78,11 +87,3 @@ with rwlock.lock_w():
     * run `scripts\deploy.bat`
 * github -> PyPI
     * When release in github
-
-### Version control
-* cy-rwlock XX.YY.ZZ
-    * XX.YY match the latest git tag.
-    * ZZ will increase automatically when new commit appear in master branch.
-    * XX: Update when change architecture
-    * YY: Update when add or modify some features
-    * ZZ: Update when bugfix or minor changes.
