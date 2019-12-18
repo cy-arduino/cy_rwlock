@@ -79,3 +79,10 @@ with rwlock.lock_w():
 * github -> PyPI
     * When release in github
 
+### Version control
+* cy-rwlock XX.YY.ZZ
+    * XX.YY match the latest git tag.
+    * ZZ will increase automatically when new commit appear in master branch.
+    * XX: Update when change architecture
+    * YY: Update when add or modify some features
+    * ZZ: Update when bugfix or minor changes.
