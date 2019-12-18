@@ -45,7 +45,9 @@ def convert_version(git_version):
     new_ver = ver.group('main')
 
     if ver.group('post'):
-        new_ver += ".post{}".format(ver.group('post'))
+        new_ver += ".{}".format(ver.group('post'))
+    else:
+        new_ver += ".0"
 
     print("new version: {}".format(new_ver))
     return new_ver
