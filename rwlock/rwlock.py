@@ -10,7 +10,7 @@ class RwLock:
                  cross_process=True):
         self.name = name if name else self.__class__.__name__
         self.log = logging.getLogger(self.name)
-        self.log.propagate = debug
+        self.log.propagate = debug  # propagate log to higher level
         self._cross_process = cross_process
 
         # prevent writer starvation. block new read when someone want to write.
@@ -29,11 +29,11 @@ class RwLock:
             self._read_cnt = 0
 
     def acquire_r(self):
-        self.log.debug("")
+        self.log.info("")
         if self._write_first:
-            self.log.debug("wait writter")
+            self.log.info("wait writter")
             self._read_lock.acquire()
-            self.log.debug("wait writter done")
+            self.log.info("wait writter done")
             self._read_lock.release()
 
         if self._cross_process:
@@ -50,7 +50,7 @@ class RwLock:
                     self._write_lock.acquire()
 
     def release_r(self):
-        self.log.debug("")
+        self.log.info("")
         if self._cross_process:
             with self._read_cnt.get_lock():
                 self._read_cnt.value -= 1
@@ -65,18 +65,18 @@ class RwLock:
                     self._write_lock.release()
 
     def acquire_w(self):
-        self.log.debug("")
+        self.log.info("")
         if self._write_first:
-            self.log.debug("block new read")
+            self.log.info("block new read for write")
             self._read_lock.acquire()
         self._write_lock.acquire()
 
     def release_w(self):
-        self.log.debug("")
+        self.log.info("")
         self._write_lock.release()
         if self._write_first:
             self._read_lock.release()
-            self.log.debug("un-block new read")
+            self.log.info("un-block new read")
 
     @contextmanager
     def lock_r(self):
