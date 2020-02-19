@@ -6,7 +6,7 @@ from time import time as now
 
 
 class TestRwLock(TestCase):
-    TIME_ACCURACY = 0.1
+    TIME_ACCURACY = 0.2
     TIME_TICK = 0.1
 
     def setUp(self):

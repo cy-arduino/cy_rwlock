@@ -1,6 +1,8 @@
-from multiprocessing import Lock, Value
-from contextlib import contextmanager
 import logging
+from contextlib import contextmanager
+from multiprocessing import Lock as LockMp
+from multiprocessing import Value
+from threading import Lock
 
 
 class RwLock:
@@ -14,13 +16,15 @@ class RwLock:
         # prevent writer starvation. block new read when someone want to write.
         self._write_first = write_first
 
-        self._write_lock = Lock()
-        if self._write_first:
-            self._read_lock = Lock()
-
         if self._cross_process:
+            self._write_lock = LockMp()
+            if self._write_first:
+                self._read_lock = LockMp()
             self._read_cnt = Value('i', 0)
         else:
+            self._write_lock = Lock()
+            if self._write_first:
+                self._read_lock = Lock()
             self._read_cnt_lock = Lock()
             self._read_cnt = 0
 
